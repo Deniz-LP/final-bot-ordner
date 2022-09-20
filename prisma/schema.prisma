@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+model Counting {
+  server String @id
+  nummer Int
+  channel_id String
+  player_id String
+}
+
+model EmbedGen {
+  server_id String 
+  channelsend_id String
+  player_id String
+  status String?
+  channel_id String?
+  title String?
+  
+
+  @@unique(fields: [server_id, player_id, channelsend_id], name: "identify")
+}
+model JoinRole {
+  server String @id
+  role_id String
+}
+model LevelCooldown {
+  server String 
+  player_id String
+  cooldown String
+
+   @@unique(fields: [server, player_id], name: "identify")
+}
+model LevelingSyst {
+  server String 
+  player_id String 
+  xp String
+  fulllevel String
+  alleXP String
+
+  @@unique(fields: [server, player_id], name: "identify")
+}
+
+model Moderation {
+  server String @id
+  role_ids String
+}
+model Reactionroles {
+  server String @id
+  channel_id String
+  msg_id String
+  role_id String
+  emoji String
+}
+
+model Rollenlevel{
+  server String 
+  level String 
+  role_id String
+
+  @@unique(fields: [server, level], name: "identify")
+}
+model SpracheServer {
+  server_id String @id
+  lang String
+}
+
+model ToggleLevel {
+  server String @id
+  status String
+}
+
+model prefix {
+  server_id String @id
+  prefix String
+}

@@ -1,0 +1,258 @@
+//counting anfang
+
+
+con.query(`SELECT * FROM CountingChannel WHERE server = '` + message.guild.id + `';`, (err, rows3) => {
+  if (err) throw err;
+  if (rows3.length >= 1) {
+    if (rows3[0].channel_id === message.channel.id) {
+
+      //
+
+      console.log("test1");
+
+
+      con.query(`SELECT * FROM CountingLastUserServer WHERE server = '` + message.guild.id + `';`, (err, rows2) => {
+        if (err) throw err;
+        if (rows2.length >= 1) {
+          //if (!(rows2[0].player_id === message.author.id)) {
+          if (1 == 1) {
+
+            console.log("test2");
+            //
+
+
+            sql = `DELETE FROM CountingLastUserServer WHERE server = '` + message.guild.id + `';`;
+
+            con.query(sql);
+
+            sql = `INSERT INTO CountingLastUserServer (server, player_id) VALUES ('` + message.guild.id + `', '` + message.author.id + `');`;
+
+            con.query(sql);
+
+
+            con.query(`SELECT * FROM Counting WHERE server = '` + message.guild.id + `'`, (err, rows) => {
+              if (err) throw err;
+
+
+              if (rows.length >= 1) {
+                let AktuelleNr = rows[0].nummer2;
+
+                console.log(AktuelleNr);
+
+                if (BigInt(AktuelleNr) != null) {
+
+                  let g1 = BigInt(AktuelleNr).toString();
+                  let g = parseInt(g1) + 1;
+
+
+
+                  if (args[0] === "" + AktuelleNr + "") {
+
+
+
+                    f = '' + g;
+
+                    sql = `DELETE FROM Counting WHERE server = '` + message.guild.id + `'`;
+
+                    con.query(sql);
+
+                    sql = `INSERT INTO Counting (nummer2, server) VALUES ('` + f + `', '` + message.guild.id + `');`;
+
+                    lastUser = message.author.id;
+                    con.query(sql);
+
+                    if ((message.channel.permissionsFor(client.user).has("MANAGE_CHANNELS"))) {
+                      message.channel.setTopic("Aktuelle Zahl: " + f);
+                    } else {
+                      const randomChannel = message.guild.channels.cache.find(channel =>
+                        channel.type === "text" && channel.permissionsFor(client.user).has("SEND_MESSAGES") && channel.permissionsFor(client.user).has("VIEW_CHANNEL"));
+                      if (randomChannel != undefined) {
+                        con.query(`SELECT * FROM SpracheServer WHERE server_id = '` + message.guild.id + `';`, (err, rows) => {
+                          if (err) throw err;
+                          if (rows.length >= 1) {
+                            let language = rows[0].lang;
+                            if (language == "de") {
+                              randomChannel.send("Entschuldigen für Störung, aber Jamal bräuchte die Berechtigung MANAGE_CHANNELS, <@" + message.guild.ownerID + ">.");
+
+                            } else if (language == "en") {
+                              randomChannel.send("Sorry for disturb, but Jamal would like to get the permission MANAGE_CHANNELS, <@" + message.guild.ownerID + ">.");
+
+                            }
+                          } else {
+
+                            randomChannel.send("Sorry for disturb, but Jamal would like to get the permission MANAGE_CHANNELS, <@" + message.guild.ownerID + ">.");
+
+                            randomChannel.send('(No Language set! "' + Prefix + 'lang" as an Administrator!)').then(msg => msg.delete({ timeout: deleteTime }));
+                          }
+                        });
+                      }
+
+                    }
+
+                  } else {
+
+                    DeleteMessage(1);
+
+                  }
+                } else {
+                  if ((message.channel.permissionsFor(client.user).has("MANAGE_MESSAGES"))) {
+
+                    message.delete({ timeout: 1 });
+
+
+
+                  } else {
+                    const randomChannel = message.guild.channels.cache.find(channel =>
+                      channel.type === "text" && channel.permissionsFor(client.user).has("SEND_MESSAGES") && channel.permissionsFor(client.user).has("VIEW_CHANNEL"));
+                    if (randomChannel != undefined) {
+                      con.query(`SELECT * FROM SpracheServer WHERE server_id = '` + message.guild.id + `';`, (err, rows) => {
+                        if (err) throw err;
+                        if (rows.length >= 1) {
+                          let language = rows[0].lang;
+                          if (language == "de") {
+                            randomChannel.send("Entschuldigen für Störung, aber Jamal bräuchte die Berechtigung MANAGE_MESSAGES, <@" + message.guild.ownerID + ">.");
+
+                          } else if (language == "en") {
+                            randomChannel.send("Sorry for disturb, but Jamal would like to get the permission MANAGE_MESSAGES, <@" + message.guild.ownerID + ">.");
+
+                          }
+                        } else {
+
+                          randomChannel.send("Sorry for disturb, but Jamal would like to get the permission MANAGE_MESSAGES, <@" + message.guild.ownerID + ">.");
+
+                          randomChannel.send('(No Language set! "' + Prefix + 'lang" as an Administrator!)').then(msg => msg.delete({ timeout: deleteTime }));
+                        }
+                      });
+
+                    }
+                  }
+                  sql = `INSERT INTO Counting (nummer2, server) VALUES ('1', '` + message.guild.id + `');`;
+
+                  con.query(sql);
+                }
+
+              } else {
+                DeleteMessage(1);
+
+                sql = `INSERT INTO Counting (nummer2, server) VALUES ('1', '` + message.guild.id + `');`;
+
+                con.query(sql);
+              }
+
+            });
+
+            //
+          } else {
+            //
+
+
+            DeleteMessage(1);
+          }
+        } else {
+
+          //
+
+
+          sql = `DELETE FROM CountingLastUserServer WHERE server = '` + message.guild.id + `';`;
+
+          con.query(sql);
+
+          sql = `INSERT INTO CountingLastUserServer (server, player_id) VALUES ('` + message.guild.id + `', '` + message.author.id + `');`;
+
+          con.query(sql);
+
+
+          con.query(`SELECT * FROM Counting WHERE server = '` + message.guild.id + `'`, (err, rows) => {
+            if (err) throw err;
+
+
+            if (rows.length >= 1) {
+              let AktuelleNr = rows[0].nummer2;
+
+
+              if (BigInt(AktuelleNr) != null) {
+
+                let g1 = BigInt(AktuelleNr).toString();
+                let g = parseInt(g1) + 1;
+
+
+                if (args[0] === "" + AktuelleNr + "") {
+
+
+                  f = '' + g;
+
+                  sql = `DELETE FROM Counting WHERE server = '` + message.guild.id + `'`;
+
+                  con.query(sql);
+
+                  sql = `INSERT INTO Counting (nummer2, server) VALUES ('` + f + `', '` + message.guild.id + `');`;
+
+                  lastUser = message.author.id;
+                  con.query(sql);
+
+                  if ((message.channel.permissionsFor(client.user).has("MANAGE_CHANNELS"))) {
+
+                    message.channel.setTopic("Aktuelle Zahl: " + f);
+                    DeleteMessage(1);
+                    message.channel.send("**" + message.author.username + " -> **" + (g - 1));
+
+
+
+
+                  } else {
+                    const randomChannel = message.guild.channels.cache.find(channel =>
+                      channel.type === "text" && channel.permissionsFor(client.user).has("SEND_MESSAGES") && channel.permissionsFor(client.user).has("VIEW_CHANNEL"));
+                    if (randomChannel != undefined) {
+                      con.query(`SELECT * FROM SpracheServer WHERE server_id = '` + message.guild.id + `';`, (err, rows) => {
+                        if (err) throw err;
+                        if (rows.length >= 1) {
+                          let language = rows[0].lang;
+                          if (language == "de") {
+                            randomChannel.send("Entschuldigen für Störung, aber Jamal bräuchte die Berechtigung MANAGE_CHANNELS, <@" + message.guild.ownerID + ">.");
+
+                          } else if (language == "en") {
+                            randomChannel.send("Sorry for disturb, but Jamal would like to get the permission MANAGE_CHANNELS, <@" + message.guild.ownerID + ">.");
+
+                          }
+                        } else {
+
+                          randomChannel.send("Sorry for disturb, but Jamal would like to get the permission MANAGE_CHANNELS, <@" + message.guild.ownerID + ">.");
+
+                          randomChannel.send('(No Language set! "' + Prefix + 'lang" as an Administrator!)').then(msg => msg.delete({ timeout: deleteTime }));
+                        }
+                      });
+                    }
+
+                  }
+
+                } else {
+
+                  DeleteMessage(1);
+
+                }
+              } else {
+                DeleteMessage(1);
+                sql = `INSERT INTO Counting (nummer2, server) VALUES ('1', '` + message.guild.id + `');`;
+
+                con.query(sql);
+              }
+
+            } else {
+              DeleteMessage(1);
+
+              sql = `INSERT INTO Counting (nummer2, server) VALUES ('1', '` + message.guild.id + `');`;
+
+              con.query(sql);
+            }
+
+          });
+
+
+
+        }
+      });
+    }
+  }
+});
+
+//counting ende

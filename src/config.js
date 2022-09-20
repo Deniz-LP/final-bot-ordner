@@ -1,0 +1,7 @@
+exports.TOKEN = 'ODA3MzczOTgyNDExNTIyMDgw.GxxIww.8TF1J3NUA6rk_7TN5qfqz6AQlJ8CEOe0_Zua_M'
+exports.PREFIX = '?'
+exports.MYSQL = 'Deniz11&9'
+exports.STATUS = '0';
+exports.OWNERS = ["466596723297484810"]
+exports.DEFAULTPERMS = ["SEND_MESSAGES", "VIEW_CHANNEL"]
+exports.DELETETIME = 30000;
