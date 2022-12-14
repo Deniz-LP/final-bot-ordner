@@ -18,7 +18,8 @@ module.exports = new Command({
     async run(message, args, client, Prefix) {
 
        
-        let modrechte = client.utils.TestRechte(message);
+    let modrechte = client.utils.TestRechte(message, client);
+	try{
         let ut = client.utils;
 
         let db = client.db;
@@ -73,7 +74,9 @@ module.exports = new Command({
 
 		message.reply({ files: [attachment] });
         }
-
+	}catch (e){
+		console.log("Error bei "+ this.name +  ": "+ e)
+	  }
         
     }
     

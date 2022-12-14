@@ -6,6 +6,7 @@ module.exports = new Command({
     usage: '<>',
     cd: 10,
     async run (message, args, client) {
+        try{
         let db = client.db;
     let languageDB = await db.spracheServer.findUnique({
       where: {
@@ -34,5 +35,8 @@ module.exports = new Command({
         }
 
         message.reply(client.utils.translation(lang, ["Zufällige Queue :D", 'Queue shuffled :D']))
+    }catch (e){
+        console.log("Error bei "+ this.name +  ": "+ e)
+      }
     }  
 })

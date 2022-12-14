@@ -29,6 +29,20 @@ model EmbedGen {
 
   @@unique(fields: [server_id, player_id, channelsend_id], name: "identify")
 }
+
+model Giveaway {
+  server_id String 
+  giveaway_id Int @id
+  message_id String
+  channel_id String
+  player_id String
+  endtime BigInt
+  title String
+  desc String
+  finished Boolean
+  winner_id String
+}
+
 model JoinRole {
   server String @id
   role_id String

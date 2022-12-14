@@ -9,8 +9,9 @@ module.exports = new Command({
     usage: '<none>',
     cd: 10,
     async run (message, args, client, Prefix) {
-        
-        let modrechte = client.utils.TestRechte(message);
+        try{
+    
+      let modrechte = await client.utils.TestRechte(message, client, db);
         let ut = client.utils;
         
         let db = client.db;
@@ -56,6 +57,8 @@ module.exports = new Command({
 
 
         //here will run the command
-        
+      }catch (e){
+        console.log("Error bei "+ this.name +  ": "+ e)
+      }
     }  
 })

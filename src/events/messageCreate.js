@@ -17,13 +17,43 @@ module.exports = class ready extends Event {
    * @param {Message} message 
    */
   async run(client, message) {
-
+    try{
     let extraCD = 1;
     let cooldown = false;
     let levelingsystem = true;
     let DELETETIMEE = 30000;
     let pref = client.config.PREFIX;
     let ut = client.utils;
+
+    if (message.channel.type === "DM") {
+      if (!(client.config.OWNERS.includes(message.author.id) || message.author.bot)) {
+        let ImageLink = "";
+        message.attachments.forEach(attachment => {
+          ImageLink = attachment.proxyURL;
+
+        });
+        console.log("DM: von " + message.author.tag + "  --- ID: -> " + message.author.id + "\nNachricht: " + message.content + "\nImage: " + ImageLink);
+        client.users.fetch(client.config.OWNERS[0]).then((user) => {
+          try {
+            let ImageLink = "";
+            message.attachments.forEach(attachment => {
+              ImageLink = attachment.proxyURL;
+
+            });
+            user.send("DM: von " + message.author.tag + "  --- ID: -> " + message.author.id + "\nNachricht: " + message.content + "\nImage: " + ImageLink);
+
+          } catch (err) {
+            console.log("err")
+          }
+        });
+      } else if (client.config.OWNERS.includes(message.author.id)) {
+
+      }
+      return;
+    }
+
+
+
     let data = await client.db.spracheServer.findUnique({
       where: {
         server_id: message.guild.id
@@ -59,32 +89,7 @@ module.exports = class ready extends Event {
     if (message.author.bot) return;
 
 
-    if (message.channel.type === "DM") {
-      if (!(client.config.OWNERS.includes(message.author.id) || message.author.bot)) {
-        let ImageLink = "";
-        message.attachments.forEach(attachment => {
-          ImageLink = attachment.proxyURL;
-
-        });
-        console.log("DM: von " + message.author.tag + "  --- ID: -> " + message.author.id + "\nNachricht: " + message.content + "\nImage: " + ImageLink);
-        client.users.fetch(client.config.OWNERS[0]).then((user) => {
-          try {
-            let ImageLink = "";
-            message.attachments.forEach(attachment => {
-              ImageLink = attachment.proxyURL;
-
-            });
-            user.send("DM: von " + message.author.tag + "  --- ID: -> " + message.author.id + "\nNachricht: " + message.content + "\nImage: " + ImageLink);
-
-          } catch (err) {
-            console.log("err")
-          }
-        });
-      } else if (client.config.OWNERS.includes(message.author.id)) {
-
-      }
-      return;
-    }
+    
 
     if (message.author.bot || !message.guild) return
     //console.log(message);
@@ -814,6 +819,8 @@ module.exports = class ready extends Event {
         }
       }
 
+    }}catch (e){
+      console.log("Error bei "+ this.name +  ": "+ e)
     }
 
   }

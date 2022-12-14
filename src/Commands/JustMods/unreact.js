@@ -4,81 +4,85 @@ const Command = require("../../struct/Commands");
 const Utils = require("../../utils/Utils");
 
 module.exports = new Command({
-   
-    name: 'uunreact',
-    aliases: ['unre'],
-    description: '',
-    usage: '<>',
-    cd: 10,
-    async run(message, args, client, Prefix) {
 
-        
-        let modrechte = client.utils.TestRechte(message);
-        let ut = client.utils;
+  name: 'uunreact',
+  aliases: ['unre'],
+  description: '',
+  usage: '<>',
+  cd: 10,
+  async run(message, args, client, Prefix) {
+    try {
 
-        let db = client.db;
-        let languageDB = await db.spracheServer.findUnique({where: {
-            server_id: message.guild.id
-          }})
-        let lang = languageDB.lang;
-        
+      let modrechte = await client.utils.TestRechte(message, client, db);
+      let ut = client.utils;
 
-        if (client.config.OWNERS.includes(message.member.id)) {
+      let db = client.db;
+      let languageDB = await db.spracheServer.findUnique({
+        where: {
+          server_id: message.guild.id
         }
+      })
+      let lang = languageDB.lang;
 
-        if (modrechte == true) {
-            if (message.reference != null && args.length == 1) {
 
-               let pingedmsg = await new Promise((resolve, reject) => {
-                
-                        resolve(message.channel.messages.fetch(message.reference.messageId));
-                    
+      if (client.config.OWNERS.includes(message.member.id)) {
+      }
+
+      if (modrechte == true) {
+        if (message.reference != null && args.length == 1) {
+
+          let pingedmsg = await new Promise((resolve, reject) => {
+
+            resolve(message.channel.messages.fetch(message.reference.messageId));
+
+          })
+
+
+          let emoji = args[0];
+          console.log(emoji)
+          var emoji1 = emoji.split(':')
+          if (emoji1.length >= 2) {
+            var emojiID = emoji1[2].split('>')
+            console.log(emoji1)
+            console.log(emojiID)
+            let zt = await new Promise((resolve, reject) => {
+
+              resolve(message.guild.emojis.cache.find(emj => emj.id === emojiID[0]));
+
             })
 
-            
-              let emoji = args[0];
-              console.log(emoji)
-              var emoji1 = emoji.split(':')
-              if (emoji1.length >= 2) {
-                var emojiID = emoji1[2].split('>')
-                console.log(emoji1)
-                console.log(emojiID)
-                let zt = await new Promise((resolve, reject) => {
-                
-                    resolve(message.guild.emojis.cache.find(emj => emj.id === emojiID[0]));
-                
-        })
+            if (pingedmsg.reactions.cache.has(zt)) {
+              pingedmsg.reactions.removeAll();
 
-                if (pingedmsg.reactions.cache.has(zt)) {
-                  pingedmsg.reactions.removeAll();
+              message.delete();
+            } else {
+              message.reply(ut.translation(lang, ["Bitte nutze ein Emoji welches schon als Reaktion benutzt wurde, um alle Reactions zu löschen!"
+                , "Please use an emoji which is already used as a reaction to delete all reactions!"]))
 
-                  message.delete();
-                } else {
-                 message.reply(ut.translation(lang, ["Bitte nutze ein Emoji welches schon als Reaktion benutzt wurde, um alle Reactions zu löschen!"
-                 , "Please use an emoji which is already used as a reaction to delete all reactions!"]))
+            }
+          } else {
+            if (pingedmsg.reactions.cache.has(emoji)) {
 
-                }
-              } else {
-                if (pingedmsg.reactions.cache.has(emoji)) {
+              pingedmsg.reactions.removeAll();
 
-                  pingedmsg.reactions.removeAll();
-
-                  message.delete();
-
-                } else {
-                    message.reply(ut.translation(lang, ["Bitte nutze ein Emoji welches schon als Reaktion benutzt wurde, um alle Reactions zu löschen!"
-                    , "Please use an emoji which is already used as a reaction to delete all reactions!"]))
-
-                }
-              }
+              message.delete();
 
             } else {
-               message.reply(ut.translation(lang, ["Bitte Pinge eine Nachricht um Jamals Reaktion zu entfernen und füge ein Emoji an deinen Command an!", 
-               "Please mention a message to remove the reaction from Jamal and add an emoji to your command!"]))
+              message.reply(ut.translation(lang, ["Bitte nutze ein Emoji welches schon als Reaktion benutzt wurde, um alle Reactions zu löschen!"
+                , "Please use an emoji which is already used as a reaction to delete all reactions!"]))
+
             }
-
           }
-        //here will run the command
 
+        } else {
+          message.reply(ut.translation(lang, ["Bitte Pinge eine Nachricht um Jamals Reaktion zu entfernen und füge ein Emoji an deinen Command an!",
+            "Please mention a message to remove the reaction from Jamal and add an emoji to your command!"]))
+        }
+
+      }
+      //here will run the command
+    } catch (e) {
+      console.log("Error bei " + this.name + ": " + e)
     }
+  }
 })

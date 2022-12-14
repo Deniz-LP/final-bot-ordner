@@ -9,14 +9,21 @@ module.exports = class MusicBot extends Client {
     constructor(options = {}) {
         super({
             partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-            intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES
-                     ,Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.DIRECT_MESSAGE_TYPING]
+            intents: new Intents(3276799)
         })
         this.config = config
         this.utils = new Utils(this)
         this.events = new Collection();
         this.commands = new Collection();
         this.aliases = new Collection();
+        this.slashCommands = new Collection();
+        /*this.categories = require("fs").readdirSync(`C:/Users/Deniz/Documents/GitHub/final-bot-ordner/src/Commands`);
+        //Require the Handlers                  Add the antiCrash file too, if its enabled
+        ["slashCommands"]
+            .filter(Boolean)
+            .forEach(h => {
+                require(`C:/Users/Deniz/Documents/GitHub/final-bot-ordner/src/handlers/${h}`)(this);
+            })*/
         this.ytsr = ytsr
         this.defaultPerms = new Permissions(this.config.DEFAULTPERMS).freeze()
         /**
@@ -32,6 +39,7 @@ module.exports = class MusicBot extends Client {
         this.on('raw', (d)=> this.music.manager.updateVoiceState(d));
         this.leveling = new LevelingSystem(this)
         this.status = 0
+        this.lieder = 0
         }
 
     async start() {

@@ -7,6 +7,7 @@ module.exports = new Command({
     usage: '',
     cd: 10,
     async run (message, args, client) {
+      try{
         let db = client.db;
     let languageDB = await db.spracheServer.findUnique({
       where: {
@@ -20,5 +21,8 @@ module.exports = new Command({
         if (pl.queue.size < args[0]) return message.reply(client.utils.translation(lang, ["Queue ist leer",'There is nothing in the queue']))
 
         pl.stop(args[0] || 0)
+      }catch (e){
+        console.log("Error bei "+ this.name +  ": "+ e)
+      }
     }  
 })

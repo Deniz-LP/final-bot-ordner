@@ -6,6 +6,7 @@ module.exports = new Command({
     usage: '<>',
     cd: 10,
     async run (message, args, client) {
+      try{
         let db = client.db;
     let languageDB = await db.spracheServer.findUnique({
       where: {
@@ -18,5 +19,8 @@ module.exports = new Command({
         if (!pl) return message.reply(client.utils.translation(lang, ["Du kannst nichts entfernen.", "There's nothing to stop,"]));
         pl.queue.clear();
         pl.stop()
+      }catch (e){
+        console.log("Error bei "+ this.name +  ": "+ e)
+      }
     }  
 })
