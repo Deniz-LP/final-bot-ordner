@@ -42,6 +42,8 @@ module.exports = new Command({
           selfDeafen: true,
           volume: 100
         });
+
+        
         //this will only run if you send a full playlist
         if (res.loadType === 'PLAYLIST_LOADED') {
           if (player.state !== 'CONNECTED') player.connect();

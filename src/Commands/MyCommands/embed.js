@@ -9,12 +9,11 @@ module.exports = new Command({
     cd: 10,
     async run(message, args, client, Prefix) {
       try{
+   let ut = client.utils;
+       
 
-      
-    let modrechte = await client.utils.TestRechte(message, client, db);
-        let ut = client.utils;
-
-        let db = client.db;
+        let db = client.db; 
+        let modrechte = await client.utils.TestRechte(message, client, db);
     let languageDB = await db.spracheServer.findUnique({
       where: {
         server_id: message.guild.id

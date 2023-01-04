@@ -14,6 +14,7 @@ module.exports = new Command({
   cd: 10,
   async run(message, args, client, Prefix) {
     try {
+      let db = client.db;
       let mode = 1;
 
       const background = await readFile('./wallpaper.jpg');
@@ -47,7 +48,6 @@ module.exports = new Command({
       var levelingAmount = 200;
       let ut = client.utils;
       let modrechte = await client.utils.TestRechte(message, client, db);
-      let db = client.db;
       let languageDB = await db.spracheServer.findUnique({
         where: {
           server_id: message.guild.id
@@ -229,7 +229,8 @@ module.exports = new Command({
                   server: message.guild.id,
                   player_id: taggesUsa.id,
                   fulllevel: "0",
-                  xp: "0"
+                  xp: "0",
+                  alleXP: "0"
                 }
 
               })
@@ -244,6 +245,7 @@ module.exports = new Command({
               "The User <@" + taggesUsa.id + "> is level " + Level + " with " + Experience + "/" + (levelingAmount + (levelingAmount * Level)) + " XP."]));
             } else if (mode === 1) {
               let maxlvl = levelingAmount + (levelingAmount * Level);
+              
               const canvas = createCanvas(700, 250);
               const context = canvas.getContext('2d');
 
@@ -257,7 +259,11 @@ module.exports = new Command({
 
               context.font = '40px sans-serif';
               context.fillStyle = '#ffffff';
-              context.fillText(taggesUsa.user.username, canvas.width / 2.5, canvas.height / 3.5);
+              context.fillText(taggesUsa.user.username, canvas.width / 2, canvas.height / 3.5);
+
+              context.font = '40px sans-serif';
+              context.fillStyle = '#ffffff';
+              context.fillText("Level "+Level, canvas.width / 3.5, canvas.height / 3.5);
 
               context.font = '35px sans-serif';
               context.fillStyle = '#ffffff';
@@ -295,7 +301,6 @@ module.exports = new Command({
 
           }
         }
-
       } else if (args.length === 0) {
         if (!levelDB) {
           levelDB = await db.levelingSyst.create({
@@ -331,35 +336,47 @@ module.exports = new Command({
           context.strokeStyle = '#0099ff';
           context.strokeRect(0, 0, canvas.width, canvas.height);
 
+
+          
+
           context.font = '40px sans-serif';
           context.fillStyle = '#ffffff';
-          context.fillText(message.member.user.username, canvas.width / 2.5, canvas.height / 3.5);
+          context.fillText(message.member.user.username, canvas.width / 2.5, canvas.height / 4);
+
+          
+                    context.font = '30px sans-serif';
+                    context.fillStyle = '#ffffff';
+                    context.fillText("Level "+Level, canvas.width / 2.5, canvas.height / 2.3);
 
           context.font = '35px sans-serif';
           context.fillStyle = '#ffffff';
-          context.fillText(Experience + "/" + maxlvl + " XP.", canvas.width / 2.5, canvas.height / 1.2);
+          context.fillText(levelDB.xp + " / 200 XP", canvas.width / 2.5, canvas.height / 1.2);
 
-          let percent = (Experience / maxlvl) * 100;
-          let anzahlStreifen = percent / 2;
-          let str = "";
-          for (wied = 0; wied <= anzahlStreifen; wied++) {
-            str = str + "█"; //50
-          }
+         //balken
+         let percent = (levelDB.xp / 200) * 100;
+         let anzahlStreifen = percent / 2;
+         let str = "";
+         for (wied = 0; wied <= anzahlStreifen; wied++) {
+           str = str + "█"; //50
+         }
+
+         context.font = '10px sans-serif';
+         //context.font = applyText(canvas, str);
+         context.fillStyle = '#00ff00';
+         context.fillText(str, canvas.width / 2.5, canvas.height / 1.7);
+         context.fillText(str, canvas.width / 2.5, canvas.height / 1.8);
+         context.fillText(str, canvas.width / 2.5, canvas.height / 1.9);
+         context.fillText(str, canvas.width / 2.5, canvas.height / 2);
+
+         context.beginPath();
+         context.arc(125, 125, 100, 0, Math.PI * 2, true);
+         context.closePath();
+         context.clip();
+         //▉
 
 
-          context.font = '10px sans-serif';
-          //context.font = applyText(canvas, str);
-          context.fillStyle = '#00ff00';
-          context.fillText(str, canvas.width / 2.5, canvas.height / 1.7);
-          context.fillText(str, canvas.width / 2.5, canvas.height / 1.8);
-          context.fillText(str, canvas.width / 2.5, canvas.height / 1.9);
-          context.fillText(str, canvas.width / 2.5, canvas.height / 2);
-
-          context.beginPath();
-          context.arc(125, 125, 100, 0, Math.PI * 2, true);
-          context.closePath();
-          context.clip();
-          //▉
+          
+         
 
           context.drawImage(avatar, 25, 25, 200, 200);
 

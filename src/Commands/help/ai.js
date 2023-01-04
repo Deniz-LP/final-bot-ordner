@@ -60,6 +60,7 @@ module.exports = new Command({
       }
     } catch (e) {
       console.log("Error bei " + this.name + ": " + e)
+
     }
   }
 

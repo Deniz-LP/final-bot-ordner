@@ -1,5 +1,7 @@
-exports.TOKEN = 'SEPERAT'
+
+exports.TOKEN = 'ODA3MzczOTgyNDExNTIyMDgw.GukmC8.8Fb2AcRMFrkvIvCCalrzXKapRAzE1f9OUH3HLI'
 exports.APPLICATIONID = "807373982411522080"
+exports.GUILDID = "737734007512498226"
 exports.PREFIX = '?'
 exports.MYSQL = 'Deniz11&9'
 exports.STATUS = '0';

@@ -1,47 +1,38 @@
-//this is the template for commands
 const Command = require("../../struct/Commands");
 const Utils = require("../../utils/Utils");
+
 module.exports = new Command({
-    name: 'setlevel',
-    aliases: ['setVoll'],
-    description: 'just deniz',
-    usage: '<levelVoll>',
-    cd: 10,
-    async run(message, args, client, Prefix) {
-        try {
+  name: 'setlevel',
+  aliases: ['setVoll'],
+  description: 'just deniz',
+  usage: '<levelVoll>',
+  cd: 10,
+  async run(message, args, client, Prefix) {
+    try {
+      if (client.config.OWNERS.includes(message.member.id)) {
+        let user = message.mentions.users.size === 1 ? message.mentions.users.first() : message.guild.members.fetch(args[0]);
 
-            if (client.config.OWNERS.includes(message.member.id)) {
+        if (user != null) {
+          let level = await client.db.levelingSyst.findUnique({
+            where: {
+              server: message.guild.id,
+              player_id: user.id,
+            },
+          });
 
-                let user;
-                if (message.mentions.users.size == 1) {
-                    user = message.mentions.roles.first();
-                } else if (message.guild.members.fetch(user => user.id === args[0]) != undefined) {
-                    user = message.guild.roles.cache.find(role => role.id === args[0])
-                }
-
-                if (user != null) {
-                    let level = await client.db.levelingSyst.findUnique({
-                        where: {
-                            server: message.guild.id
-                        }
-
-                    })
-
-                    level = await client.db.levelingSyst.update({
-                        where: {
-                            server: message.guild.id
-                        },
-                        data: {
-                            server: message.guild.id,
-                            player_id: user.id,
-                            fulllevel: args[0],
-                            xp: level.xp
-                        }
-                    })
-                }
-            }
-        } catch (e) {
-            console.log("Error bei " + this.name + ": " + e)
+          level = await client.db.levelingSyst.update({
+            where: {
+              server: message.guild.id,
+              player_id: user.id,
+            },
+            data: {
+              fulllevel: args[1],
+            },
+          });
         }
+      }
+    } catch (e) {
+      console.log(`Error bei ${this.name}: ${e}`);
     }
-})
+  },
+});

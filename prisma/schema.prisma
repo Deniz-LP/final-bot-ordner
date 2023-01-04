@@ -41,6 +41,7 @@ model Giveaway {
   desc String
   finished Boolean
   winner_id String
+  starttime BigInt
 }
 
 model JoinRole {
@@ -69,12 +70,15 @@ model Moderation {
   role_ids String
 }
 model Reactionroles {
-  server String @id
+  server String 
   channel_id String
   msg_id String
   role_id String
   emoji String
+  
+  @@unique(fields: [server, channel_id, msg_id, emoji], name: "identify")
 }
+
 
 model Rollenlevel{
   server String 

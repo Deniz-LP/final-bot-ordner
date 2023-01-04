@@ -7,7 +7,7 @@ const Utils = require("../../utils/Utils");
  * @param {Client} client  
  */
 const configuration =  new Configuration({
-    apiKey: "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",
+    apiKey: "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"
 });
 const openai = new OpenAIApi(configuration);
 
@@ -35,7 +35,7 @@ module.exports = new Command({
             let eingabe = "";
 
             for(let a = 0; a < args.length; a++){
-                eingabe = eingabe + args[a] + " "
+                eingabe += `${args[i]} `;
             }
 
             let completion;

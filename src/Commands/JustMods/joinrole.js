@@ -1,4 +1,7 @@
-//this is the template for commands
+//can you improve the code? plase clean it up and make it more readable
+//now... i will make it more readable
+
+
 const { join } = require("@prisma/client/runtime");
 const { err } = require("@sapphire/framework");
 const { Client, Role } = require("discord.js");
@@ -61,7 +64,6 @@ module.exports = new Command({
           "Perfect! This role is now added to every new joined user!"]))
 
       } else if (args[1].toUpperCase() === "OFF") {
-
         if (!data) {
           db.joinRole.delete({
             where: {

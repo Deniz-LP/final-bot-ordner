@@ -1,6 +1,6 @@
-//this is the template for commands
 const Command = require("../../struct/Commands");
 const Utils = require("../../utils/Utils");
+
 module.exports = new Command({
   name: 'dm',
   aliases: [''],
@@ -37,4 +37,4 @@ module.exports = new Command({
       console.log("Error bei " + this.name + ": " + e)
     }
   }
-})
+});
